@@ -1,38 +1,70 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, ScrollView, } from 'react-native';
+import { View, StyleSheet, Text, ScrollView, Pressable } from 'react-native';
 import { RadioButton } from 'react-native-paper';
-import DatePicker from 'react-native-datepicker';
+import { CheckBox } from 'react-native-elements';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 
 import UserInputField from './src/Components/UserInputField';
 import Button from './src/Components/Button';
+import CustomCheckbox from './src/Components/CustomCheckBox';
 
-export default function Register() {
+export default function Register({ navigation }) {
     const [userFirstName, setUserFirstName] = useState('');
     const [userLastName, setUserLastName] = useState('');
+    const [userEmail, setUserEmail] = useState('');
+    const [userPassword, setUserPassword] = useState('');
+    const [userConformPassword, setUserConformPassword] = useState('');
     const [selectedValue, setSelectedValue] = useState('first');
-    const [selectedDate, setSelectedDate] = useState('');
+    const [isChecked, setIsChecked] = useState(false);
+    const [date, setDate] = useState(new Date());
+    const [showDatePicker, setShowDatePicker] = useState(false);
 
 
     const handleRegistration = () => {
         //console.log(userEmail + " " + userPassword);
     }
 
-    // const handleDateChange = (date) => {
-    //     setSelectedDate(date);
-    // };
+    const handleDateChange = (event, selectedDate) => {
+        const currentDate = selectedDate || date;
+        setShowDatePicker(false);
+        setDate(currentDate);
+    };
+
     return (
-        <View style={styles.PageStyle}>
-            <Text style={styles.ReactAppText}>React App</Text>
-            <View style={styles.LoginPage}>
-                <ScrollView>
+        <ScrollView>
+            <View style={styles.PageStyle}>
+                <Pressable onPress={() => navigation.navigate('Login')}>
+                    <Text style={styles.ReactAppText}>React App</Text>
+                </Pressable>
+                <View style={styles.LoginPage}>
                     <Text style={styles.LoginTextStyle}>Register</Text>
-                    <InputField email={userFirstName} password={userLastName} setEmail={setUserFirstName} setPassword={setUserLastName} style1={styles.InputStyle} style2={styles.TextStyle}></InputField>
+                    <UserInputField placeholderValue={"First Name"} userValue={userFirstName} setfuction={setUserFirstName} style1={styles.InputStyle} style2={styles.TextStyle}></UserInputField>
+                    <UserInputField placeholderValue={"Last Name"} userValue={userLastName} setfuction={setUserLastName} style1={styles.InputStyle} style2={styles.TextStyle}></UserInputField>
+                    <UserInputField placeholderValue={"Email"} userValue={userEmail} setfuction={setUserEmail} style1={styles.InputStyle} style2={styles.TextStyle}></UserInputField>
+                    <UserInputField placeholderValue={"Password"} userValue={userPassword} setfuction={setUserPassword} style1={styles.InputStyle} style2={styles.TextStyle}></UserInputField>
+                    <UserInputField placeholderValue={"Conform Password"} userValue={userConformPassword} setfuction={setUserConformPassword} style1={styles.InputStyle} style2={styles.TextStyle}></UserInputField>
                     <RadioButtons selectedValue={selectedValue} setSelectedValue={setSelectedValue}></RadioButtons>
+                    <CheckBox title="Check this box" checked={isChecked} onPress={() => setIsChecked(!isChecked)}></CheckBox>
+                    <Pressable onPress={() => setShowDatePicker(true)}>
+                        <Text style={styles.DateTextStyle}>CHOOSE DATE</Text>
+                    </Pressable>
+                    {showDatePicker && (
+                        <DateTimePicker
+                            testID="dateTimePicker"
+                            value={date}
+                            mode="date" // You can use "time" for time picker
+                            is24Hour={true}
+                            display="default"
+                            onChange={handleDateChange}
+                        />
+                    )}
+                    <CustomCheckbox></CustomCheckbox>
+
                     <Button buttonText={styles.ButtonText} onPress={handleRegistration} buttonName={"Register"}></Button>
-                </ScrollView>
+                </View>
             </View>
-        </View>
+        </ScrollView>
     );
 
 };
@@ -47,17 +79,10 @@ const styles = StyleSheet.create({
     ButtonText: { marginTop: 50, marginBottom: 40, color: 'white', width: '90%', fontSize: 15, fontWeight: '600', backgroundColor: "#eb6c49", padding: 15, alignSelf: "center", borderRadius: 5, textAlign: 'center' },
     OrStyle: { color: "grey", textAlign: "center", marginBottom: 20 },
     SignUpStyle: { color: 'black', alignSelf: 'flex-start', marginLeft: 15, fontWeight: '600', alignSelf: 'center', marginBottom: 40 },
+    DateTextStyle:{ color: "black", margin: 30, fontSize: 15,fontWeight:"600",borderWidth:1,width:150,padding:5 }
 
 });
 
-const InputField = ({ userEmail, userPassword, setEmail, setPassword, style1, style2 }) => {
-    return (
-        <View style={styles.LoginPage}>
-            <UserInputField placeholderValue={"First Name"} userEmail={userEmail} setEmail={setEmail} style1={style1} style2={style2}></UserInputField>
-            <UserInputField placeholderValue={"Last Name"} userPassword={userPassword} setPassword={setPassword} style1={style1} style2={style2}></UserInputField>
-        </View>
-    );
-};
 
 const RadioButtons = ({ selectedValue, setSelectedValue }) => {
     return (
@@ -73,19 +98,4 @@ const RadioButtons = ({ selectedValue, setSelectedValue }) => {
     );
 };
 
-const DatePickers = () => {
-    return (
-        <DatePicker
-            style={{ width: 200 }}
-            date={selectedDate}
-            mode="date"
-            placeholder="Select date"
-            format="YYYY-MM-DD"
-            minDate="2020-01-01"
-            maxDate="2025-12-31"
-            confirmBtnText="Confirm"
-            cancelBtnText="Cancel"
-            onDateChange={handleDateChange}
-        />
-    );
-};
+
