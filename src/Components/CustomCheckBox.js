@@ -9,12 +9,16 @@ function CustomCheckbox() {
   };
 
   return (
-    <TouchableOpacity onPress={toggleCheckbox}>
+    
+    <TouchableOpacity style={{marginTop:20}} onPress={toggleCheckbox}>
+      <View style={{flexDirection:'row',marginLeft:20}}>
       <View style={[styles.checkbox, isChecked ? styles.checked : styles.unchecked]}>
         {isChecked && <Text style={styles.checkmark}>✓</Text>}
       </View>
-      <Text style={{color:"black"}}>Is Checked: {isChecked ? 'Yes' : 'No'}</Text>
+      <Text style={{color:"black",marginLeft:10,fontWeight:'500',alignSelf:'center'}}>Agree to the terms and condition: {isChecked ? 'Yes' : 'No'}</Text>
+      </View>
     </TouchableOpacity>
+    
   );
 }
 
@@ -23,12 +27,12 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderWidth: 2,
-    borderColor: '#000',
+    borderColor: 'grey',
     alignItems: 'center',
     justifyContent: 'center',
   },
   checked: {
-    backgroundColor: '#000',
+    backgroundColor: 'grey',
   },
   unchecked: {
     backgroundColor: '#fff',

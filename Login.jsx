@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, Image, Pressable } from 'react-native';
+import { View, StyleSheet, Text, Image, Pressable,ScrollView } from 'react-native';
 
 import UserInputField from './src/Components/UserInputField';
 import Button from './src/Components/Button';
-//import { auth } from '../firebase';
 
 export default function Login({ navigation }) {
 
@@ -16,14 +15,6 @@ export default function Login({ navigation }) {
   const photo2 = require("./src/Assests/google.png");
   const photo3 = require(".//src/Assests/twitter.png");
 
-  // const handleRegistration = async () => {
-  //   try {
-  //     await auth.createUserWithEmailAndPassword(email, password);
-  //     // Registration successful, navigate to the next screen
-  //   } catch (error) {
-  //     console.error('Registration failed', error);
-  //   }
-  // };
   const handleRegistration = () => {
     if (validateForm()) {
       // Perform your registration logic here
@@ -58,6 +49,7 @@ export default function Login({ navigation }) {
 }
 
   return (
+    <ScrollView>
     <View style={styles.PageStyle}>
       <Text style={styles.ReactAppText}>React App</Text>
       <View style={styles.LoginPage}>
@@ -77,6 +69,7 @@ export default function Login({ navigation }) {
         <BottomIcons photo1={photo1} photo2={photo2} photo3={photo3}></BottomIcons>
       </View>
     </View>
+    </ScrollView>
 
   );
 };
@@ -93,16 +86,6 @@ const styles = StyleSheet.create({
   SignUpStyle: { color: 'black', alignSelf: 'flex-start', marginLeft: 15, fontWeight: '600', alignSelf: 'center', marginBottom: 40 },
   ValidationStyle: { color: "red", fontWeight: '700', marginLeft: 20 }
 });
-
-const InputField = ({ userEmail, userPassword, setEmail, setPassword, style1, style2 }) => {
-  return (
-    <View style={styles.LoginPage}>
-      <UserInputField placeholderValue={"Email"} userEmail={userEmail} setEmail={setEmail} style1={style1} style2={style2}></UserInputField>
-      <UserInputField placeholderValue={"Password"} userPassword={userPassword} setPassword={setPassword} style1={style1} style2={style2}></UserInputField>
-    </View>
-  );
-};
-
 const BottomIcons = ({ photo1, photo2, photo3 }) => {
   return (
     <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 20 }}>

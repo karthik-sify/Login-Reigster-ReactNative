@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, ScrollView, Pressable } from 'react-native';
 import { RadioButton } from 'react-native-paper';
-import { CheckBox } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import db from './Database';
 
 
 import UserInputField from './src/Components/UserInputField';
@@ -15,8 +15,7 @@ export default function Register({ navigation }) {
     const [userEmail, setUserEmail] = useState('');
     const [userPassword, setUserPassword] = useState('');
     const [userConformPassword, setUserConformPassword] = useState('');
-    const [selectedValue, setSelectedValue] = useState('first');
-    const [isChecked, setIsChecked] = useState(false);
+    const [selectedValue, setSelectedValue] = useState('Male');
     const [date, setDate] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [firstNameError, setFirstNameError] = useState('');
@@ -24,16 +23,32 @@ export default function Register({ navigation }) {
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [conformPasswordError, setConformPasswordError] = useState('');
-    const[matchPasswordError,setMatchPasswordError]=useState('');
-
+    const [matchPasswordError, setMatchPasswordError] = useState('');
 
     const handleRegistration = () => {
         if (validateForm()) {
-            // Perform your registration logic here
-            alert('Registration successful!');
+            db.transaction((tx) => {
+                tx.executeSql(
+                    `INSERT INTO users (firstName, lastName, email, password, gender, dob)
+               VALUES (?, ?, ?, ?, ?, ?);`,
+                    [userFirstName, userLastName, userEmail, userPassword, selectedValue, date.toDateString()],
+                    (tx, results) => {
+                        if (results.rowsAffected > 0) {
+                            console.log('INSERTED SUCCESSFULLY')
+                            alert('Registration successful!');
+                            navigation.navigate('Home');
+                        } else {
+                            alert('Registration failed. Please try again.');
+                        }
+                    },
+                    (error) => {
+                        console.error('Error inserting user data:', error);
+                    }
+                );
+            });
         }
     };
-    
+
     function validateForm() {
         let isValid = true;
 
@@ -44,11 +59,11 @@ export default function Register({ navigation }) {
         if (userLastName.trim() === '') {
             setLastNameError('Last Name is required *');
             isValid = false;
-        }else setLastNameError('')
+        } else setLastNameError('')
         if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(userEmail)) {
             setEmailError('Invalid email address *');
             isValid = false;
-        }else setEmailError('')
+        } else setEmailError('')
         if (userPassword.length < 8) {
             setPasswordError('Password must be at least 8 characters long *');
             isValid = false;
@@ -61,7 +76,7 @@ export default function Register({ navigation }) {
         } else if (!/[!@#$%^&*]/.test(userPassword)) {
             setPasswordError('Password must contain at least one special character *');
             isValid = false;
-        }else setPasswordError('')
+        } else setPasswordError('')
         if (userConformPassword.length < 8) {
             setConformPasswordError('Password must be at least 8 characters long *');
             isValid = false;
@@ -74,14 +89,14 @@ export default function Register({ navigation }) {
         } else if (!/[!@#$%^&*]/.test(userConformPassword)) {
             setConformPasswordError('Password must contain at least one special character *');
             isValid = false;
-        }else setConformPasswordError('')
+        } else setConformPasswordError('')
 
         if (userConformPassword !== userPassword) {
-            setMatchPasswordError('Passwords do not match *' );
+            setMatchPasswordError('Passwords do not match *');
             isValid = false;
-          } else {
+        } else {
             setMatchPasswordError('');
-          }
+        }
 
         return isValid;
     }
@@ -90,12 +105,13 @@ export default function Register({ navigation }) {
         const currentDate = selectedDate || date;
         setShowDatePicker(false);
         setDate(currentDate);
+
     };
 
     return (
         <ScrollView>
             <View style={styles.PageStyle}>
-                <Pressable onPress={() => navigation.navigate('Login')}>
+                <Pressable onPress={() => navigation.navigate('Home')}>
                     <Text style={styles.ReactAppText}>React App</Text>
                 </Pressable>
                 <View style={styles.LoginPage}>
@@ -111,10 +127,14 @@ export default function Register({ navigation }) {
                     <UserInputField placeholderValue={"Conform Password"} userValue={userConformPassword} setfuction={setUserConformPassword} style1={styles.InputStyle} style2={styles.TextStyle}></UserInputField>
                     <Text style={styles.ValidationStyle}>{conformPasswordError}</Text>
                     <Text style={styles.ValidationStyle}>{matchPasswordError}</Text>
+                    <Text style={styles.TextStyle}>Gender:</Text>
                     <RadioButtons selectedValue={selectedValue} setSelectedValue={setSelectedValue}></RadioButtons>
-                    <CheckBox title="Check this box" checked={isChecked} onPress={() => setIsChecked(!isChecked)}></CheckBox>
+                    <Text style={{ color: "#b5b1b1", alignSelf: 'center', fontWeight: '200' }}>___________________________________________________________</Text>
+
+                    <Text style={styles.TextStyle}>Date of Birth:</Text>
+
                     <Pressable onPress={() => setShowDatePicker(true)}>
-                        <Text style={styles.DateTextStyle}>CHOOSE DATE</Text>
+                        <Text style={styles.DateTextStyle}>{date.toDateString()}</Text>
                     </Pressable>
                     {showDatePicker && (
                         <DateTimePicker
@@ -126,6 +146,8 @@ export default function Register({ navigation }) {
                             onChange={handleDateChange}
                         />
                     )}
+                    <Text style={{ color: "#b5b1b1", alignSelf: 'center', fontWeight: '200' }}>___________________________________________________________</Text>
+
                     <CustomCheckbox></CustomCheckbox>
 
                     <Button buttonText={styles.ButtonText} onPress={handleRegistration} buttonName={"Register"}></Button>
@@ -141,12 +163,12 @@ const styles = StyleSheet.create({
     LoginTextStyle: { color: "black", fontSize: 20, fontWeight: "600", marginLeft: 20, marginTop: 40, marginBottom: 10 },
     PageStyle: { backgroundColor: "#eb6c49", flex: 1, justifyContent: 'flex-end' },
     LoginPage: { backgroundColor: "white", borderTopLeftRadius: 30, borderTopRightRadius: 30, padding: 5 },
-    InputStyle: { borderWidth: 0.2, color: "black", borderTopColor: "white", borderLeftColor: "white", borderRightColor: "white", marginLeft: 15, marginRight: 15, marginBottom: 10 },
+    InputStyle: { borderWidth: 0.2, color: "black", borderTopColor: "white", borderLeftColor: "white", borderRightColor: "white", marginLeft: 15, marginRight: 15 },
     TextStyle: { color: 'black', alignSelf: 'flex-start', marginLeft: 15, fontWeight: '600', marginTop: 20 },
     ButtonText: { marginTop: 50, marginBottom: 40, color: 'white', width: '90%', fontSize: 15, fontWeight: '600', backgroundColor: "#eb6c49", padding: 15, alignSelf: "center", borderRadius: 5, textAlign: 'center' },
     OrStyle: { color: "grey", textAlign: "center", marginBottom: 20 },
     SignUpStyle: { color: 'black', alignSelf: 'flex-start', marginLeft: 15, fontWeight: '600', alignSelf: 'center', marginBottom: 40 },
-    DateTextStyle: { color: "black", margin: 30, fontSize: 15, fontWeight: "600", borderWidth: 1, width: 150, padding: 5 },
+    DateTextStyle: { color: "black", margin: 20, fontSize: 15, fontWeight: "400" },
     ValidationStyle: { color: "red", fontWeight: '700', marginLeft: 20 }
 
 });
@@ -159,9 +181,10 @@ const RadioButtons = ({ selectedValue, setSelectedValue }) => {
                 onValueChange={(value) => setSelectedValue(value)}
                 value={selectedValue}
             >
-                <RadioButton.Item label="Male" value="first" />
-                <RadioButton.Item label="Female" value="second" />
+                <RadioButton.Item label="Male" value="Male" />
+                <RadioButton.Item label="Female" value="Female" />
             </RadioButton.Group>
         </View>
     );
 };
+
