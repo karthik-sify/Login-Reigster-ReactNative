@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-function CustomCheckbox() {
-  const [isChecked, setIsChecked] = useState(false);
+function CustomCheckbox({isChecked,setIsChecked}) {
 
   const toggleCheckbox = () => {
     setIsChecked(!isChecked);

@@ -6,10 +6,10 @@ const db = SQLite.openDatabase(
         location: 'default'
     },
     () => {
-        console.log("Db created")
+        console.log("Db created:Database.js")
     },
     (error) => {
-        console.error('Error opening database:', error);
+        console.error('Error opening database:Database.js :', error);
     });
 
 // Create a table for user registration
@@ -24,10 +24,10 @@ db.transaction((tx) => {
       dob TEXT NOT NULL
     );`,[],
     () => {
-        console.log('Table created successfully');
+        console.log('Table created successfully :Database.js');
     },
     (error) => {
-        console.error('Error creating table:', error);
+        console.error('Error creating table:Database.js  :', error);
     }
     );
 });

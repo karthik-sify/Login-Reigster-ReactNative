@@ -18,6 +18,7 @@ export default function Register({ navigation }) {
     const [selectedValue, setSelectedValue] = useState('Male');
     const [date, setDate] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
+    const [isChecked, setIsChecked] = useState(false);
     const [firstNameError, setFirstNameError] = useState('');
     const [lastNameError, setLastNameError] = useState('');
     const [emailError, setEmailError] = useState('');
@@ -27,25 +28,27 @@ export default function Register({ navigation }) {
 
     const handleRegistration = () => {
         if (validateForm()) {
-            db.transaction((tx) => {
-                tx.executeSql(
-                    `INSERT INTO users (firstName, lastName, email, password, gender, dob)
+            if (isChecked) {
+                db.transaction((tx) => {
+                    tx.executeSql(
+                        `INSERT INTO users (firstName, lastName, email, password, gender, dob)
                VALUES (?, ?, ?, ?, ?, ?);`,
-                    [userFirstName, userLastName, userEmail, userPassword, selectedValue, date.toDateString()],
-                    (tx, results) => {
-                        if (results.rowsAffected > 0) {
-                            console.log('INSERTED SUCCESSFULLY')
-                            alert('Registration successful!');
-                            navigation.navigate('Home');
-                        } else {
-                            alert('Registration failed. Please try again.');
+                        [userFirstName, userLastName, userEmail, userPassword, selectedValue, date.toDateString()],
+                        (tx, results) => { //async 
+                            if (results.rowsAffected > 0) {
+                                console.log('INSERTED to DB SUCCESSFULLY :Regsiter.js')
+                                alert('Registration successful!');
+                                navigation.navigate('Login');
+                            } else {
+                                alert('Registration failed. Please try again.');
+                            }
+                        },
+                        (error) => {
+                            console.error('Error inserting user data:', error);
                         }
-                    },
-                    (error) => {
-                        console.error('Error inserting user data:', error);
-                    }
-                );
-            });
+                    );
+                });
+            }else{alert('Agree to The Terms and Condition')}
         }
     };
 
@@ -148,7 +151,7 @@ export default function Register({ navigation }) {
                     )}
                     <Text style={{ color: "#b5b1b1", alignSelf: 'center', fontWeight: '200' }}>___________________________________________________________</Text>
 
-                    <CustomCheckbox></CustomCheckbox>
+                    <CustomCheckbox isChecked={isChecked} setIsChecked={setIsChecked}></CustomCheckbox>
 
                     <Button buttonText={styles.ButtonText} onPress={handleRegistration} buttonName={"Register"}></Button>
                 </View>
