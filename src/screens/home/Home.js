@@ -62,13 +62,11 @@ export default function Home({ navigation }) {
                     <Button buttonText={styles.ActionButtonText} onPress={() => handleUpdate()} buttonName={"Update"}></Button>
                     <Button buttonText={styles.ActionButtonText} onPress={() => handleDelete()} buttonName={"Delete"}></Button>
                 </View>
-                {createFlag && (<DetailsForm createFlag={createFlag} setCreateFlag={setCreateFlag} firstNamePlaceholderValue={"First Name"} lastNamePlaceholderValue={"Last Name"} emailPlaceholderValue={"Email"} PasswordPlaceholdervalue={"Password"} conformPasswordPlaceholderValue={"Conform Password"} genderPlaceHolder={"Male"} datePlaceholderValue={new Date()}></DetailsForm>)}
+                {createFlag && (<DetailsForm createFlag={createFlag} setCreateFlag={setCreateFlag} firstNamePlaceholderValue={""} lastNamePlaceholderValue={""} emailPlaceholderValue={""} PasswordPlaceholdervalue={""} conformPasswordPlaceholderValue={""} genderPlaceHolder={"Male"} datePlaceholderValue={new Date()}></DetailsForm>)}
                 {updateFlag && (<DetailsForm updateFlag={updateFlag} setUpdateFlag={setUpdateFlag} firstNamePlaceholderValue={userDetails.firstName} lastNamePlaceholderValue={userDetails.lastName} emailPlaceholderValue={userDetails.email} PasswordPlaceholdervalue={userDetails.password} conformPasswordPlaceholderValue={userDetails.password} genderPlaceHolder={userDetails.gender} datePlaceholderValue={new Date(userDetails.dob)}></DetailsForm>)}
-
-                {deleteFlag && (<UserList></UserList>)}
+                {deleteFlag && (<UserList updateFlag={updateFlag}></UserList>)}
                 <Button buttonText={styles.ButtonText} onPress={() => handleLogout()} buttonName={"Logout"}></Button>
             </ScrollView>
-
 
 
             {/* <NavigationContainer>
@@ -77,8 +75,6 @@ export default function Home({ navigation }) {
                     drawerContent={(props) => <Sidebar {...props} />}
                 >
                     <Drawer.Screen name="Home" component={HomeScreen} />
-                    <Drawer.Screen name="About" component={AboutScreen} />
-                    <Drawer.Screen name="Settings" component={SettingsScreen} />
                 </Drawer.Navigator>
             </NavigationContainer> */}
         </View>

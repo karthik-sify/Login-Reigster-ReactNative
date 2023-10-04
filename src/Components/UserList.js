@@ -20,7 +20,7 @@ const retrieveData = async () => {
   }
 };
 
-const UserList = () => {
+const UserList = ({updateFlag}) => {
    const [users, setUsers] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -31,7 +31,7 @@ const UserList = () => {
     };
 
     fetchData();
-  }, []);
+  }, [updateFlag]);
 
   const getUsers = (userEmail) => {
     db.transaction((tx) => {

@@ -12,18 +12,6 @@ const Sidebar = ({ navigation }) => {
         >
           <Text>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.sidebarItem}
-          onPress={() => navigation.navigate('About')}
-        >
-          <Text>About</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.sidebarItem}
-          onPress={() => navigation.navigate('Settings')}
-        >
-          <Text>Settings</Text>
-        </TouchableOpacity>
       </View>
     </DrawerContentScrollView>
   );

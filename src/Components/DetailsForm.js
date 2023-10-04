@@ -31,7 +31,7 @@ export default function Register({createFlag,updateFlag,setUpdateFlag,setCreateF
 
     const handleRegistration = () => {
         if (validateForm()) {
-            if (isChecked) {
+            if (isChecked || updateFlag) {
                 if(updateFlag===true)DeleteUser(userEmail);
                 db.transaction((tx) => {
                     tx.executeSql(
@@ -153,7 +153,7 @@ export default function Register({createFlag,updateFlag,setUpdateFlag,setCreateF
             )}
             <Text style={{ color: "#b5b1b1", alignSelf: 'center', fontWeight: '200' }}>___________________________________________________________</Text>
 
-            <CustomCheckbox isChecked={isChecked} setIsChecked={setIsChecked}></CustomCheckbox>
+            {!updateFlag && (<CustomCheckbox isChecked={isChecked} setIsChecked={setIsChecked}></CustomCheckbox>)}
 
             <Button buttonText={styles.ButtonText} onPress={handleRegistration} buttonName={"Register"}></Button>
         </View>
