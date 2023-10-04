@@ -22,10 +22,10 @@ export default Splash=({navigation})=>{
         const fetchData = async () => {
           const email=await retrieveData();
           if(email===null){
-            navigation.navigate("Login")
+            navigation.replace("Login")
           }
           else{
-            navigation.navigate("Home")
+            navigation.replace("Home")
           }
         };
         fetchData();
@@ -33,7 +33,7 @@ export default Splash=({navigation})=>{
 
     return(
         <View>
-            <Text style={{color:'black'}}>hiii</Text>
+            {/* <Text style={{color:'black'}}>hiii</Text> */}
         </View>
     );
 };

@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Text, ScrollView, Pressable } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import db from './Database';
+import db from '../../Services/Database';
+import styles from './styles';
 
 
-import UserInputField from './src/Components/UserInputField';
-import Button from './src/Components/Button';
-import CustomCheckbox from './src/Components/CustomCheckBox';
+import UserInputField from '../../Components/UserInputField';
+import Button from '../../Components/Button';
+import CustomCheckbox from '../../Components/CustomCheckBox';
 
-export default function Register({ navigation }) {
+export default function Register({ navigation}) {
     const [userFirstName, setUserFirstName] = useState('');
     const [userLastName, setUserLastName] = useState('');
     const [userEmail, setUserEmail] = useState('');
@@ -25,6 +26,7 @@ export default function Register({ navigation }) {
     const [passwordError, setPasswordError] = useState('');
     const [conformPasswordError, setConformPasswordError] = useState('');
     const [matchPasswordError, setMatchPasswordError] = useState('');
+    
 
     const handleRegistration = () => {
         if (validateForm()) {
@@ -38,7 +40,7 @@ export default function Register({ navigation }) {
                             if (results.rowsAffected > 0) {
                                 console.log('INSERTED to DB SUCCESSFULLY :Regsiter.js')
                                 alert('Registration successful!');
-                                navigation.navigate('Login');
+                                navigation.replace('Login');
                             } else {
                                 alert('Registration failed. Please try again.');
                             }
@@ -161,20 +163,20 @@ export default function Register({ navigation }) {
 
 };
 
-const styles = StyleSheet.create({
-    ReactAppText: { color: 'white', fontWeight: '700', fontSize: 30, marginLeft: 15, marginBottom: 50 },
-    LoginTextStyle: { color: "black", fontSize: 20, fontWeight: "600", marginLeft: 20, marginTop: 40, marginBottom: 10 },
-    PageStyle: { backgroundColor: "#eb6c49", flex: 1, justifyContent: 'flex-end' },
-    LoginPage: { backgroundColor: "white", borderTopLeftRadius: 30, borderTopRightRadius: 30, padding: 5 },
-    InputStyle: { borderWidth: 0.2, color: "black", borderTopColor: "white", borderLeftColor: "white", borderRightColor: "white", marginLeft: 15, marginRight: 15 },
-    TextStyle: { color: 'black', alignSelf: 'flex-start', marginLeft: 15, fontWeight: '600', marginTop: 20 },
-    ButtonText: { marginTop: 50, marginBottom: 40, color: 'white', width: '90%', fontSize: 15, fontWeight: '600', backgroundColor: "#eb6c49", padding: 15, alignSelf: "center", borderRadius: 5, textAlign: 'center' },
-    OrStyle: { color: "grey", textAlign: "center", marginBottom: 20 },
-    SignUpStyle: { color: 'black', alignSelf: 'flex-start', marginLeft: 15, fontWeight: '600', alignSelf: 'center', marginBottom: 40 },
-    DateTextStyle: { color: "black", margin: 20, fontSize: 15, fontWeight: "400" },
-    ValidationStyle: { color: "red", fontWeight: '700', marginLeft: 20 }
+// const styles = StyleSheet.create({
+//     ReactAppText: { color: 'white', fontWeight: '700', fontSize: 30, marginLeft: 15, marginBottom: 50 },
+//     LoginTextStyle: { color: "black", fontSize: 20, fontWeight: "600", marginLeft: 20, marginTop: 40, marginBottom: 10 },
+//     PageStyle: { backgroundColor: "#eb6c49", flex: 1, justifyContent: 'flex-end' },
+//     LoginPage: { backgroundColor: "white", borderTopLeftRadius: 30, borderTopRightRadius: 30, padding: 5 },
+//     InputStyle: { borderWidth: 0.2, color: "black", borderTopColor: "white", borderLeftColor: "white", borderRightColor: "white", marginLeft: 15, marginRight: 15 },
+//     TextStyle: { color: 'black', alignSelf: 'flex-start', marginLeft: 15, fontWeight: '600', marginTop: 20 },
+//     ButtonText: { marginTop: 50, marginBottom: 40, color: 'white', width: '90%', fontSize: 15, fontWeight: '600', backgroundColor: "#eb6c49", padding: 15, alignSelf: "center", borderRadius: 5, textAlign: 'center' },
+//     OrStyle: { color: "grey", textAlign: "center", marginBottom: 20 },
+//     SignUpStyle: { color: 'black', alignSelf: 'flex-start', marginLeft: 15, fontWeight: '600', alignSelf: 'center', marginBottom: 40 },
+//     DateTextStyle: { color: "black", margin: 20, fontSize: 15, fontWeight: "400" },
+//     ValidationStyle: { color: "red", fontWeight: '700', marginLeft: 20 }
 
-});
+// });
 
 
 const RadioButtons = ({ selectedValue, setSelectedValue }) => {

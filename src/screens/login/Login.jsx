@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Text, Image, Pressable, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import UserInputField from './src/Components/UserInputField';
-import Button from './src/Components/Button';
-import db from './Database';
+import UserInputField from '../../Components/UserInputField';
+import Button from '../../Components/Button';
+import db from '../../Services/Database';
+import styles from './styles';
 
 export default function Login({ navigation }) {
 
@@ -13,10 +14,9 @@ export default function Login({ navigation }) {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   let flag=0;
-
-  const photo1 = require("./src/Assests/fb_logo.png");
-  const photo2 = require("./src/Assests/google.png");
-  const photo3 = require(".//src/Assests/twitter.png");
+  const photo1=require("../../Assests/fb_logo.png");
+  const photo2 = require("../../Assests/google.png");
+  const photo3 = require("../../Assests/twitter.png");
 
   const storeData = async (key, value) => {
     try {
@@ -42,7 +42,7 @@ export default function Login({ navigation }) {
             }
             if(flag){
               alert('Login successful!');
-              navigation.navigate('Home');
+              navigation.replace('Home');
             }
             else{
               alert('Enter valid Credentials');
@@ -108,18 +108,18 @@ export default function Login({ navigation }) {
   );
 };
 
-const styles = StyleSheet.create({
-  ReactAppText: { color: 'white', fontWeight: '700', fontSize: 30, marginLeft: 15, marginBottom: 50 },
-  LoginTextStyle: { color: "black", fontSize: 20, fontWeight: "600", marginLeft: 20, marginTop: 40, marginBottom: 10 },
-  PageStyle: { backgroundColor: "#eb6c49", flex: 1, justifyContent: 'flex-end' },
-  LoginPage: { backgroundColor: "white", borderTopLeftRadius: 30, borderTopRightRadius: 30, padding: 5 },
-  InputStyle: { borderWidth: 0.2, color: "black", borderTopColor: "white", borderLeftColor: "white", borderRightColor: "white", marginLeft: 15, marginRight: 15, marginBottom: 10 },
-  TextStyle: { color: 'black', alignSelf: 'flex-start', marginLeft: 15, fontWeight: '600', marginTop: 20 },
-  ButtonText: { marginTop: 50, marginBottom: 40, color: 'white', width: '90%', fontSize: 15, fontWeight: '600', backgroundColor: "#eb6c49", padding: 15, alignSelf: "center", borderRadius: 5, textAlign: 'center' },
-  OrStyle: { color: "grey", textAlign: "center", marginBottom: 20 },
-  SignUpStyle: { color: 'black', alignSelf: 'flex-start', marginLeft: 15, fontWeight: '600', alignSelf: 'center', marginBottom: 40 },
-  ValidationStyle: { color: "red", fontWeight: '700', marginLeft: 20 }
-});
+// const styles = StyleSheet.create({
+//   ReactAppText: { color: 'white', fontWeight: '700', fontSize: 30, marginLeft: 15, marginBottom: 50 },
+//   LoginTextStyle: { color: "black", fontSize: 20, fontWeight: "600", marginLeft: 20, marginTop: 40, marginBottom: 10 },
+//   PageStyle: { backgroundColor: "#eb6c49", flex: 1, justifyContent: 'flex-end' },
+//   LoginPage: { backgroundColor: "white", borderTopLeftRadius: 30, borderTopRightRadius: 30, padding: 5 },
+//   InputStyle: { borderWidth: 0.2, color: "black", borderTopColor: "white", borderLeftColor: "white", borderRightColor: "white", marginLeft: 15, marginRight: 15, marginBottom: 10 },
+//   TextStyle: { color: 'black', alignSelf: 'flex-start', marginLeft: 15, fontWeight: '600', marginTop: 20 },
+//   ButtonText: { marginTop: 50, marginBottom: 40, color: 'white', width: '90%', fontSize: 15, fontWeight: '600', backgroundColor: "#eb6c49", padding: 15, alignSelf: "center", borderRadius: 5, textAlign: 'center' },
+//   OrStyle: { color: "grey", textAlign: "center", marginBottom: 20 },
+//   SignUpStyle: { color: 'black', alignSelf: 'flex-start', marginLeft: 15, fontWeight: '600', alignSelf: 'center', marginBottom: 40 },
+//   ValidationStyle: { color: "red", fontWeight: '700', marginLeft: 20 }
+// });
 const BottomIcons = ({ photo1, photo2, photo3 }) => {
   return (
     <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 20 }}>
