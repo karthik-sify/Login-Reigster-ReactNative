@@ -6,6 +6,7 @@ import Login from './src/screens/login/Login';
 import Register from './src/screens/register/Regsiter';
 import Home from './src/screens/home/Home';
 import Splash from './src/screens/Splash/Splash';
+import NewsFeed from './src/screens/newsFeed/NewsFeed'
 
 
 
@@ -35,6 +36,11 @@ export default App=()=> {
           name='Home'
           component={Home}
           options={{ title: "Home" }}
+          />
+          <stack.Screen
+          name='NewsFeed'
+          component={NewsFeed}
+          options={{ title: "NewsFeed" }}
           />
       </stack.Navigator>
     </NavigationContainer>

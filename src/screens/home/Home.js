@@ -57,15 +57,19 @@ export default function Home({ navigation }) {
     return (
         <View>
             <ScrollView>
-                <View style={{ flexDirection: "row", justifyContent: "center", marginTop: 50, marginBottom: 50 }}>
+                <View style={{ flexDirection:'column',alignItems:'center', marginTop: 30, }}>
+            <Button buttonText={styles.ActionButtonText} onPress={()=>navigation.navigate('NewsFeed')} buttonName={"NewsFeed"}></Button>
+                <View style={{ flexDirection: "row", justifyContent: "center", marginTop: 50, marginBottom: 20 }}>
                     <Button buttonText={styles.ActionButtonText} onPress={() => handleCreate()} buttonName={"Create"}></Button>
                     <Button buttonText={styles.ActionButtonText} onPress={() => handleUpdate()} buttonName={"Update"}></Button>
                     <Button buttonText={styles.ActionButtonText} onPress={() => handleDelete()} buttonName={"Delete"}></Button>
+                </View>
                 </View>
                 {createFlag && (<DetailsForm createFlag={createFlag} setCreateFlag={setCreateFlag} firstNamePlaceholderValue={""} lastNamePlaceholderValue={""} emailPlaceholderValue={""} PasswordPlaceholdervalue={""} conformPasswordPlaceholderValue={""} genderPlaceHolder={"Male"} datePlaceholderValue={new Date()}></DetailsForm>)}
                 {updateFlag && (<DetailsForm updateFlag={updateFlag} setUpdateFlag={setUpdateFlag} firstNamePlaceholderValue={userDetails.firstName} lastNamePlaceholderValue={userDetails.lastName} emailPlaceholderValue={userDetails.email} PasswordPlaceholdervalue={userDetails.password} conformPasswordPlaceholderValue={userDetails.password} genderPlaceHolder={userDetails.gender} datePlaceholderValue={new Date(userDetails.dob)}></DetailsForm>)}
                 {deleteFlag && (<UserList updateFlag={updateFlag}></UserList>)}
                 <Button buttonText={styles.ButtonText} onPress={() => handleLogout()} buttonName={"Logout"}></Button>
+                
             </ScrollView>
 
 
