@@ -1,10 +1,10 @@
-import { Text,StyleSheet,Image,FlatList,View } from 'react-native';
+import { Text,StyleSheet,Image,FlatList,View,RefreshControl} from 'react-native';
 import GetNews from '../../Services/GetNews';
 import { useEffect, useState } from 'react';
-import Button from '../../Components/Button';
 
 export default function NewsFeed(){
     const [newsResponse,setNewsResponse]=useState([]);
+    const [refreshing, setRefreshing] = useState(false);
 
     useEffect(()=>{
         const getNewsData=async()=>{
@@ -14,19 +14,46 @@ export default function NewsFeed(){
         getNewsData();
     },[]);
 
+    const onRefresh = async() => {
+      setRefreshing(true);
+      const response=await GetNews();
+      setNewsResponse(response.articles)
+      setRefreshing(false);
+    };
+
+    const onEndReached=()=>{
+      onRefresh();
+      //in real fetch more data from server
+    }
+  
+
     return(
         <View style={styles.container}>
       <FlatList
         data={newsResponse}
         keyExtractor={(item, index) => index.toString()}
+        horizontal={false}
+        // ItemSeparatorComponent={()=><View style={{height: 1,backgroundColor: 'gray',}}></View>}
+        onEndReached={onEndReached}
+        onEndReachedThreshold={0.1} // when 10% scrolled out of 100; onEndReached is triggered. 
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
         renderItem={({ item }) => (
           <View style={styles.newsItem}>
             <Image
               source={{ uri: item.urlToImage }}
               style={styles.newsImage}
             />
-            <Text style={styles.newsTitle}>{item.title}</Text>
+            <Text style={styles.newsTitle}> {item.title}</Text>
+            {/* <Text style={styles.newsDetails}>AUTHOR: {item.author}</Text>
+            <Text style={styles.newsDetails}>URL :{item.url}</Text>
+            <Text style={styles.newsDescription}>PUBLISHED AT: {item.publishedAt}</Text> */}
             <Text style={styles.newsDescription}>{item.description}</Text>
+
           </View>
         )}
       />
@@ -70,5 +97,11 @@ const styles = StyleSheet.create({
       borderBottomRightRadius:10,
       borderBottomLeftRadius:10
     },
+    newsDetails:{
+      fontSize: 14,
+      color:'black',
+      backgroundColor:'white',
+      padding:5
+    }
   });
 

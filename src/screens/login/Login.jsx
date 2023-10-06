@@ -42,7 +42,7 @@ export default function Login({ navigation }) {
             }
             if(flag){
               alert('Login successful!');
-              navigation.replace('Home');
+              navigation.replace('TabNavigator');
             }
             else{
               alert('Enter valid Credentials');

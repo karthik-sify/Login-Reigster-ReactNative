@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { View,Text, } from "react-native";
+import { View, } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default Splash=({navigation})=>{
@@ -25,7 +25,8 @@ export default Splash=({navigation})=>{
             navigation.replace("Login")
           }
           else{
-            navigation.replace("Home")
+            //navigation.navigate("TabNavigator")
+            navigation.navigate("DrawerNavigator")
           }
         };
         fetchData();
