@@ -7,6 +7,7 @@ import Register from './src/screens/register/Regsiter';
 import Splash from './src/screens/Splash/Splash';
 import TabNavigator from './src/screens/TabNavigation/TabNavigator';
 import DrawerNavigator from './src/screens/DrawerNavigation/DrawerNavigation';
+import DrawerAndTab from './DrawerAndTab';
 
 
 
@@ -32,7 +33,7 @@ export default App = () => {
           component={Register}
           options={{ title: "Register" }}
         />
-        <stack.Screen
+        {/* <stack.Screen
           name='TabNavigator'
           component={TabNavigator}
           options={{ title: "tabs" }}
@@ -41,7 +42,13 @@ export default App = () => {
           name='DrawerNavigator'
           component={DrawerNavigator}
           options={{ title: "drawerNavigator" }}
+        /> */}
+        <stack.Screen
+          name='DrawerAndTab'
+          component={DrawerAndTab}
+          options={{ title: "DrawerAndTab" }}
         />
+        
       </stack.Navigator>
     </NavigationContainer>
 

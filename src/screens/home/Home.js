@@ -1,6 +1,5 @@
-import { View, StyleSheetz, ScrollView } from "react-native";
+import { View, ScrollView,Alert } from "react-native";
 import UserList from "../../Components/UserList";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from "./style";
 import Button from "../../Components/Button";
 import { useEffect, useState } from "react";
@@ -20,16 +19,6 @@ export default function Home({ navigation }) {
         getDetails();
     }, []);
 
-    const handleLogout = () => {
-        try {
-            AsyncStorage.clear(() => {
-                console.log('AsyncStorage cleared.');
-                navigation.replace("Login");
-            });
-        } catch (error) {
-            console.error('Error deleting item:', error);
-        }
-    }
     const handleCreate = () => {
         if (createFlag === true) setCreateFlag(false)
         else setCreateFlag(true)
@@ -41,10 +30,29 @@ export default function Home({ navigation }) {
     }
     const handleDelete = async () => {
         let userid = await RetrieveUser();
-        if (userid != null) {
-            DeleteUser(userid);
-            setDeleteFlag(false)
-        }
+        Alert.alert(
+            'Confirmation',
+            'Do you want to Delete?',
+            [
+                {
+                    text: 'No',
+                    onPress: () => console.log('No Pressed'),
+                    style: 'cancel',
+                },
+                {
+                    text: 'Yes',
+                    onPress: () => {
+                        if (userid != null) {
+                            DeleteUser(userid);
+                            setDeleteFlag(false)
+                        }
+                        console.log('Yes Pressed')
+                    },
+                },
+            ],
+            { cancelable: true }
+        );
+
     }
 
     return (
@@ -58,7 +66,7 @@ export default function Home({ navigation }) {
                 {createFlag && (<DetailsForm createFlag={createFlag} setCreateFlag={setCreateFlag} firstNamePlaceholderValue={""} lastNamePlaceholderValue={""} emailPlaceholderValue={""} PasswordPlaceholdervalue={""} conformPasswordPlaceholderValue={""} genderPlaceHolder={"Male"} datePlaceholderValue={new Date()}></DetailsForm>)}
                 {updateFlag && (<DetailsForm updateFlag={updateFlag} setUpdateFlag={setUpdateFlag} firstNamePlaceholderValue={userDetails.firstName} lastNamePlaceholderValue={userDetails.lastName} emailPlaceholderValue={userDetails.email} PasswordPlaceholdervalue={userDetails.password} conformPasswordPlaceholderValue={userDetails.password} genderPlaceHolder={userDetails.gender} datePlaceholderValue={new Date(userDetails.dob)}></DetailsForm>)}
                 {deleteFlag && (<UserList updateFlag={updateFlag}></UserList>)}
-                <Button buttonText={styles.ButtonText} onPress={() => handleLogout()} buttonName={"Logout"}></Button>
+
 
             </ScrollView>
 

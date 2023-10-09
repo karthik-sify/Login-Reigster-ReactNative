@@ -25,8 +25,9 @@ export default Splash=({navigation})=>{
             navigation.replace("Login")
           }
           else{
-            //navigation.navigate("TabNavigator")
-            navigation.navigate("DrawerNavigator")
+           // navigation.navigate("TabNavigator")
+            //navigation.navigate("DrawerNavigator")
+            navigation.navigate("DrawerAndTab")
           }
         };
         fetchData();

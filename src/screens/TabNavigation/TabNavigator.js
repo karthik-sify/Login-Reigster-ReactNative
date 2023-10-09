@@ -1,6 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../home/Home';
+import DrawerNavigator from '../DrawerNavigation/DrawerNavigation';
 import NewsScreen from '../newsFeed/NewsFeed';
 import { Image } from 'react-native';
 
@@ -17,14 +18,15 @@ const TabNavigator = () => {
         tabBarActiveTintColor:'blue',
         tabBarInactiveTintColor:'gray',
         tabBarActiveBackgroundColor:'lightgray'
-
-        
-        
       }}
-     
     >
-
-      <Tab.Screen name="Home" component={HomeScreen} options={{
+      {/* <Tab.Screen name="Home" component={HomeScreen} options={{
+        tabBarLabel: 'Home',
+        tabBarIcon: () => (
+          <Image source={photo1} style={{ width: 30, height: 30 }}></Image>
+        ),
+      }} /> */}
+      <Tab.Screen name="DrawerNavigator" component={DrawerNavigator} options={{
         tabBarLabel: 'Home',
         tabBarIcon: () => (
           <Image source={photo1} style={{ width: 30, height: 30 }}></Image>

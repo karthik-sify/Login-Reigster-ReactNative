@@ -13,7 +13,6 @@ const DrawerNavigator = () => {
             drawerContent={(props) => <Sidebar {...props} />}
         >
             <Drawer.Screen name="Home" component={HomeScreen} />
-            <Drawer.Screen name="News" component={NewsScreen} />
         </Drawer.Navigator>
     );
 };
