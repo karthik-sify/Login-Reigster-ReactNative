@@ -12,7 +12,7 @@ const DrawerNavigator = () => {
             initialRouteName="Home"
             drawerContent={(props) => <Sidebar {...props} />}
         >
-            <Drawer.Screen name="Home" component={HomeScreen} />
+            <Drawer.Screen name="Profile" component={HomeScreen} />
         </Drawer.Navigator>
     );
 };

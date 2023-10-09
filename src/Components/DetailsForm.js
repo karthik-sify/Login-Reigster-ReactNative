@@ -41,7 +41,7 @@ export default function Register({createFlag,updateFlag,setUpdateFlag,setCreateF
                         (tx, results) => { //async 
                             if (results.rowsAffected > 0) {
                                 console.log('INSERTED to DB SUCCESSFULLY :Regsiter.js')
-                                alert('Registration successful!');
+                                alert('updated successfully!');
                                 if(createFlag===true)setCreateFlag(false);
                                 if(updateFlag===true)setUpdateFlag(false);
                             } else {
@@ -134,7 +134,7 @@ export default function Register({createFlag,updateFlag,setUpdateFlag,setCreateF
             <Text style={styles.ValidationStyle}>{matchPasswordError}</Text>
             <Text style={styles.TextStyle}>Gender:</Text>
             <RadioButtons selectedValue={selectedValue} setSelectedValue={setSelectedValue}></RadioButtons>
-            <Text style={{ color: "#b5b1b1", alignSelf: 'center', fontWeight: '200' }}>___________________________________________________________</Text>
+            <Text style={{ color: "#b5b1b1", alignSelf: 'center', fontWeight: '200' }}>_________________________________________________________</Text>
 
             <Text style={styles.TextStyle}>Date of Birth:</Text>
 
@@ -151,11 +151,8 @@ export default function Register({createFlag,updateFlag,setUpdateFlag,setCreateF
                     onChange={handleDateChange}
                 />
             )}
-            <Text style={{ color: "#b5b1b1", alignSelf: 'center', fontWeight: '200' }}>___________________________________________________________</Text>
-
-            {!updateFlag && (<CustomCheckbox isChecked={isChecked} setIsChecked={setIsChecked}></CustomCheckbox>)}
-
-            <Button buttonText={styles.ButtonText} onPress={handleRegistration} buttonName={"Register"}></Button>
+            <Text style={{ color: "#b5b1b1", alignSelf: 'center', fontWeight: '200' }}>_________________________________________________________</Text>
+            <Button buttonText={styles.ButtonText} onPress={handleRegistration} buttonName={"Update"}></Button>
         </View>
     );
 

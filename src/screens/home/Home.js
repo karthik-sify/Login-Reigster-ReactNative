@@ -1,4 +1,4 @@
-import { View, ScrollView,Alert } from "react-native";
+import { View, ScrollView, Alert, Text } from "react-native";
 import UserList from "../../Components/UserList";
 import styles from "./style";
 import Button from "../../Components/Button";
@@ -7,22 +7,21 @@ import DetailsForm from '../../Components/DetailsForm'
 import DeleteUser from "../../Services/DeleteUser";
 import RetrieveUser from "../../Services/RetrieveUser";
 import RetrieveUserDetails from "../../Services/RetrieveUserDetails";
+import { Modal } from "react-native-paper";
+import { Image } from "react-native-elements";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Home({ navigation }) {
-    const [createFlag, setCreateFlag] = useState(false)
     const [updateFlag, setUpdateFlag] = useState(false)
     const [deleteFlag, setDeleteFlag] = useState(true)
     const [userDetails, setUserDetails] = useState(["FirstName", "LastName", "Email", "Password", "Conform Password", "Male", new Date().toDateString()]);
+    const photo1=require("../../Assests/edit.png");
+
 
     useEffect(() => {
         const getDetails = async () => setUserDetails(await RetrieveUserDetails());
         getDetails();
-    }, []);
-
-    const handleCreate = () => {
-        if (createFlag === true) setCreateFlag(false)
-        else setCreateFlag(true)
-    }
+    }, [updateFlag]);
     const handleUpdate = () => {
         if (updateFlag === true) setUpdateFlag(false)
         else setUpdateFlag(true)
@@ -43,8 +42,13 @@ export default function Home({ navigation }) {
                     text: 'Yes',
                     onPress: () => {
                         if (userid != null) {
+                            AsyncStorage.clear(() => {
+                                console.log('AsyncStorage cleared.');
+                                navigation.replace("Login");
+                            });
                             DeleteUser(userid);
-                            setDeleteFlag(false)
+                            // setDeleteFlag(false)
+                            
                         }
                         console.log('Yes Pressed')
                     },
@@ -56,22 +60,17 @@ export default function Home({ navigation }) {
     }
 
     return (
-        <View>
-            <ScrollView>
-                <View style={{ flexDirection: "row", justifyContent: "center", marginTop: 50, marginBottom: 20 }}>
-                    <Button buttonText={styles.ActionButtonText} onPress={() => handleCreate()} buttonName={"Create"}></Button>
-                    <Button buttonText={styles.ActionButtonText} onPress={() => handleUpdate()} buttonName={"Update"}></Button>
-                    <Button buttonText={styles.ActionButtonText} onPress={() => handleDelete()} buttonName={"Delete"}></Button>
-                </View>
-                {createFlag && (<DetailsForm createFlag={createFlag} setCreateFlag={setCreateFlag} firstNamePlaceholderValue={""} lastNamePlaceholderValue={""} emailPlaceholderValue={""} PasswordPlaceholdervalue={""} conformPasswordPlaceholderValue={""} genderPlaceHolder={"Male"} datePlaceholderValue={new Date()}></DetailsForm>)}
-                {updateFlag && (<DetailsForm updateFlag={updateFlag} setUpdateFlag={setUpdateFlag} firstNamePlaceholderValue={userDetails.firstName} lastNamePlaceholderValue={userDetails.lastName} emailPlaceholderValue={userDetails.email} PasswordPlaceholdervalue={userDetails.password} conformPasswordPlaceholderValue={userDetails.password} genderPlaceHolder={userDetails.gender} datePlaceholderValue={new Date(userDetails.dob)}></DetailsForm>)}
-                {deleteFlag && (<UserList updateFlag={updateFlag}></UserList>)}
-
-
-            </ScrollView>
-
-
-
+        <View style={{flex: 1}}>
+            <View style={{flexDirection:'row' ,padding:10,justifyContent:'space-between'}}>
+            {deleteFlag && (<UserList updateFlag={updateFlag}></UserList>)}
+            <Image source={photo1} style={{ width: 35, height: 35, margin: 20}} onPress={()=>handleUpdate()}></Image>
+            </View>
+            <Button buttonText={styles.ActionButtonText} onPress={() => handleDelete()} buttonName={"Delete User"}></Button>
+            <Modal style={{ padding: 15 }} visible={updateFlag} onDismiss={() =>setUpdateFlag(false)} animationType='slide'>
+                <ScrollView>
+                <DetailsForm updateFlag={updateFlag} setUpdateFlag={setUpdateFlag}firstNamePlaceholderValue={userDetails.firstName} lastNamePlaceholderValue={userDetails.lastName} emailPlaceholderValue={userDetails.email} PasswordPlaceholdervalue={userDetails.password} conformPasswordPlaceholderValue={userDetails.password} genderPlaceHolder={userDetails.gender} datePlaceholderValue={new Date(userDetails.dob)}></DetailsForm>
+                </ScrollView>
+            </Modal>
 
         </View>
     );

@@ -1,34 +1,35 @@
-import { Text,StyleSheet,Image,FlatList,View,RefreshControl} from 'react-native';
+import { Text, StyleSheet, Image, FlatList, View, RefreshControl } from 'react-native';
 import GetNews from '../../Services/GetNews';
 import { useEffect, useState } from 'react';
 
-export default function NewsFeed(){
-    const [newsResponse,setNewsResponse]=useState([]);
-    const [refreshing, setRefreshing] = useState(false);
+export default function NewsFeed() {
+  const [newsResponse, setNewsResponse] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
-    useEffect(()=>{
-        const getNewsData=async()=>{
-            const response=await GetNews();
-            setNewsResponse(response.articles)
-        }
-        getNewsData();
-    },[]);
-
-    const onRefresh = async() => {
-      setRefreshing(true);
-      const response=await GetNews();
+  useEffect(() => {
+    const getNewsData = async () => {
+      const response = await GetNews();
       setNewsResponse(response.articles)
-      setRefreshing(false);
-    };
-
-    const onEndReached=()=>{
-      onRefresh();
-      //in real fetch more data from server
     }
-  
+    getNewsData();
+  }, []);
 
-    return(
-        <View style={styles.container}>
+  const onRefresh = async () => {
+    setRefreshing(true);
+    const response = await GetNews();
+    setNewsResponse(response.articles)
+    setRefreshing(false);
+  };
+
+  const onEndReached = () => {
+    onRefresh();
+    //in real fetch more data from server
+  }
+
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.heading}>NEWS</Text>
       <FlatList
         data={newsResponse}
         keyExtractor={(item, index) => index.toString()}
@@ -58,50 +59,63 @@ export default function NewsFeed(){
         )}
       />
     </View>
-    );
+  );
 };
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      padding: 15,
-    },
-    newsItem: {
-      marginBottom: 50,
-      backgroundColor:'#eb6c49',
-      borderRadius:20,
-      paddingBottom:12,
-      paddingTop:12,
-    },
-    newsImage: {
-      width: '100%',
-      height: 200,
-      resizeMode: 'cover',
-      alignSelf:'center',
-      borderTopLeftRadius:10,
-      borderTopRightRadius:10,
-    },
-    newsTitle: {
-      fontSize: 18,
-      fontWeight: 'bold',
-      color:'black',
-      backgroundColor:'white',
-      padding:10,
-     
-    },
-    newsDescription: {
-      fontSize: 14,
-      color:'black',
-      backgroundColor:'white',
-      padding:10,
-      borderBottomRightRadius:10,
-      borderBottomLeftRadius:10
-    },
-    newsDetails:{
-      fontSize: 14,
-      color:'black',
-      backgroundColor:'white',
-      padding:5
-    }
-  });
+  heading: {
+    color:'white',
+    backgroundColor: '#eb6c49',
+    borderRadius: 15,
+    padding:15,
+    fontWeight:'600',
+    fontSize:16,
+    alignSelf:'center',
+    textAlign:'center',
+    width:'75%',
+    margin:10,
+  },
+  container: {
+    flex: 1,
+    padding: 15,
+  },
+  newsItem: {
+    marginTop:20,
+    marginBottom: 30,
+    backgroundColor: '#eb6c49',
+    borderRadius: 20,
+    paddingBottom: 12,
+    paddingTop: 12,
+  },
+  newsImage: {
+    width: '100%',
+    height: 200,
+    resizeMode: 'cover',
+    alignSelf: 'center',
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  },
+  newsTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'black',
+    backgroundColor: 'white',
+    padding: 10,
+
+  },
+  newsDescription: {
+    fontSize: 14,
+    color: 'black',
+    backgroundColor: 'white',
+    padding: 10,
+    borderBottomRightRadius: 10,
+    borderBottomLeftRadius: 10
+  },
+  newsDetails: {
+    fontSize: 14,
+    color: 'black',
+    backgroundColor: 'white',
+    padding: 5
+  }
+});
 

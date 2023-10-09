@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList } from 'react-native';
+import { View, Text, FlatList, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import db from '../Services/Database';
 
@@ -63,11 +63,11 @@ const UserList = ({updateFlag}) => {
         data={users}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
-          <View style={{ margin: 20 }}>
-            <Text style={{ color: "black" }}>Name: {item.firstName} {item.lastName}</Text>
-            <Text style={{ color: "black" }}>Email: {item.email}</Text>
-            <Text style={{ color: "black" }}>Gender: {item.gender}</Text>
-            <Text style={{ color: "black" }}>Date of Birth: {item.dob}</Text>
+          <View >
+            <Text style={styles.textStyle}>Name:  {item.firstName} {item.lastName}</Text>
+            <Text style={styles.textStyle}>Email:  {item.email}</Text>
+            <Text style={styles.textStyle}>Gender:  {item.gender}</Text>
+            <Text style={styles.textStyle}>Date of Birth:  {item.dob}</Text>
           </View>
         )}
       />
@@ -75,6 +75,9 @@ const UserList = ({updateFlag}) => {
   );
 };
 
+const styles=StyleSheet.create({
+  textStyle:{color:'black',fontSize:16,fontWeight:'500',margin:5}
+});
 
 
 export default UserList;
