@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, ScrollView, Pressable } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import db from '../Services/Database';
@@ -9,7 +9,6 @@ import DeleteUser from '../Services/DeleteUser';
 
 import UserInputField from './UserInputField';
 import Button from './Button';
-import CustomCheckbox from './CustomCheckBox';
 
 export default function Register({createFlag,updateFlag,setUpdateFlag,setCreateFlag,firstNamePlaceholderValue,lastNamePlaceholderValue,emailPlaceholderValue,PasswordPlaceholdervalue,conformPasswordPlaceholderValue,genderPlaceHolder,datePlaceholderValue, }) {
     const [userFirstName, setUserFirstName] = useState(firstNamePlaceholderValue);

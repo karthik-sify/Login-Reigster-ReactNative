@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+import { View, Text, FlatList, StyleSheet,Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import db from '../Services/Database';
+
 
 
 
@@ -64,6 +65,7 @@ const UserList = ({updateFlag}) => {
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
           <View >
+            <Image source={{uri:item.uri}} style={{width:100,height:100}}></Image>
             <Text style={styles.textStyle}>Name:  {item.firstName} {item.lastName}</Text>
             <Text style={styles.textStyle}>Email:  {item.email}</Text>
             <Text style={styles.textStyle}>Gender:  {item.gender}</Text>

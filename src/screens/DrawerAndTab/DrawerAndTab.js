@@ -1,7 +1,7 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import TabNavigator from './src/screens/TabNavigation/TabNavigator';
-import DrawerNavigator from './src/screens/DrawerNavigation/DrawerNavigation';
+import TabNavigator from '../TabNavigation/TabNavigator';
+import DrawerNavigator from '../DrawerNavigation/DrawerNavigation';
 
 const stack = createNativeStackNavigator()
 

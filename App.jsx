@@ -7,7 +7,7 @@ import Register from './src/screens/register/Regsiter';
 import Splash from './src/screens/Splash/Splash';
 import TabNavigator from './src/screens/TabNavigation/TabNavigator';
 import DrawerNavigator from './src/screens/DrawerNavigation/DrawerNavigation';
-import DrawerAndTab from './DrawerAndTab';
+import DrawerAndTab from './src/screens/DrawerAndTab/DrawerAndTab';
 
 
 

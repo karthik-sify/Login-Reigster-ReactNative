@@ -16,13 +16,17 @@ const db = SQLite.openDatabase(
 db.transaction((tx) => {
     tx.executeSql(
         `CREATE TABLE IF NOT EXISTS users (
-      firstName TEXT NOT NULL,
-      lastName TEXT NOT NULL,
-      email TEXT NOT NULL,
-      password TEXT NOT NULL,
-      gender TEXT NOT NULL,
-      dob TEXT NOT NULL
-    );`,[],
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            firstName TEXT NOT NULL,
+            lastName TEXT NOT NULL,
+            email TEXT NOT NULL,
+            password TEXT NOT NULL,
+            gender TEXT NOT NULL,
+            dob TEXT NOT NULL,
+            latitude REAL,
+            longitude REAL,
+            uri TEXT
+          );`,[],
     () => {
         console.log('Table created successfully :Database.js');
     },

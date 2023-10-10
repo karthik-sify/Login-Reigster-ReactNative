@@ -4,13 +4,14 @@ import { RadioButton } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import db from '../../Services/Database';
 import styles from './styles';
+import ImagePic from '../../Components/ImagePic';
 
 
 import UserInputField from '../../Components/UserInputField';
 import Button from '../../Components/Button';
 import CustomCheckbox from '../../Components/CustomCheckBox';
 
-export default function Register({ navigation}) {
+export default function Register({ navigation }) {
     const [userFirstName, setUserFirstName] = useState('');
     const [userLastName, setUserLastName] = useState('');
     const [userEmail, setUserEmail] = useState('');
@@ -19,6 +20,7 @@ export default function Register({ navigation}) {
     const [selectedValue, setSelectedValue] = useState('Male');
     const [date, setDate] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
+    const [selectedImage, setSelectedImage] = useState(null);
     const [isChecked, setIsChecked] = useState(false);
     const [firstNameError, setFirstNameError] = useState('');
     const [lastNameError, setLastNameError] = useState('');
@@ -26,16 +28,15 @@ export default function Register({ navigation}) {
     const [passwordError, setPasswordError] = useState('');
     const [conformPasswordError, setConformPasswordError] = useState('');
     const [matchPasswordError, setMatchPasswordError] = useState('');
-    
 
     const handleRegistration = () => {
         if (validateForm()) {
             if (isChecked) {
                 db.transaction((tx) => {
                     tx.executeSql(
-                        `INSERT INTO users (firstName, lastName, email, password, gender, dob)
-               VALUES (?, ?, ?, ?, ?, ?);`,
-                        [userFirstName, userLastName, userEmail, userPassword, selectedValue, date.toDateString()],
+                        `INSERT INTO users (firstName, lastName, email, password, gender, dob,uri)
+               VALUES (?, ?, ?, ?, ?, ?, ?);`,
+                        [userFirstName, userLastName, userEmail, userPassword, selectedValue, date.toDateString(),selectedImage],
                         (tx, results) => { //async 
                             if (results.rowsAffected > 0) {
                                 console.log('INSERTED to DB SUCCESSFULLY :Regsiter.js')
@@ -50,7 +51,7 @@ export default function Register({ navigation}) {
                         }
                     );
                 });
-            }else{alert('Agree to The Terms and Condition')}
+            } else { alert('Agree to The Terms and Condition') }
         }
     };
 
@@ -152,6 +153,7 @@ export default function Register({ navigation}) {
                         />
                     )}
                     <Text style={{ color: "#b5b1b1", alignSelf: 'center', fontWeight: '200' }}>___________________________________________________________</Text>
+                    <ImagePic selectedImage={selectedImage} setSelectedImage={setSelectedImage}></ImagePic>
 
                     <CustomCheckbox isChecked={isChecked} setIsChecked={setIsChecked}></CustomCheckbox>
 
