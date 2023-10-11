@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
-import { View, Text, Pressable } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Pressable, Image } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import db from '../Services/Database';
 import styles from '../screens/register/styles';
 import DeleteUser from '../Services/DeleteUser';
-
-
+import HandleCameraLaunch from '../Services/TakePic';
+import UploadFromGallery from '../Services/UploadPic';
+import requestLocationPermission from '../Services/LocationPermission';
+import getUserLocation from '../Services/GetLocation';
 import UserInputField from './UserInputField';
 import Button from './Button';
 
-export default function Register({createFlag,updateFlag,setUpdateFlag,setCreateFlag,firstNamePlaceholderValue,lastNamePlaceholderValue,emailPlaceholderValue,PasswordPlaceholdervalue,conformPasswordPlaceholderValue,genderPlaceHolder,datePlaceholderValue, }) {
+export default function Register({ createFlag, updateFlag, setUpdateFlag, setCreateFlag, firstNamePlaceholderValue, lastNamePlaceholderValue, emailPlaceholderValue, PasswordPlaceholdervalue, conformPasswordPlaceholderValue, genderPlaceHolder, datePlaceholderValue, latitudePlaceholderValue, longitudePlaceholderValue, uriPlaceholderValue }) {
     const [userFirstName, setUserFirstName] = useState(firstNamePlaceholderValue);
     const [userLastName, setUserLastName] = useState(lastNamePlaceholderValue);
     const [userEmail, setUserEmail] = useState(emailPlaceholderValue);
@@ -19,7 +21,8 @@ export default function Register({createFlag,updateFlag,setUpdateFlag,setCreateF
     const [selectedValue, setSelectedValue] = useState(genderPlaceHolder);
     const [date, setDate] = useState(datePlaceholderValue);
     const [showDatePicker, setShowDatePicker] = useState(false);
-    const [isChecked, setIsChecked] = useState(false);
+    const [location, setLocation] = useState([latitudePlaceholderValue,longitudePlaceholderValue])
+    const [selectedImage, setSelectedImage] = useState(uriPlaceholderValue);
     const [firstNameError, setFirstNameError] = useState('');
     const [lastNameError, setLastNameError] = useState('');
     const [emailError, setEmailError] = useState('');
@@ -28,31 +31,46 @@ export default function Register({createFlag,updateFlag,setUpdateFlag,setCreateF
     const [matchPasswordError, setMatchPasswordError] = useState('');
 
 
+    const accessLocation = async () => {
+        if (await requestLocationPermission() === true) {
+            try {
+                const locationResult = await getUserLocation();   //await --lines below this executes after result is received
+                setLocation(locationResult);
+                alert("location Stored")
+
+            } catch (error) {
+                console.error(error);
+                alert('Location not accessed')
+            }
+        }
+    };
+
+
+
     const handleRegistration = () => {
         if (validateForm()) {
-            if (isChecked || updateFlag) {
-                if(updateFlag===true)DeleteUser(userEmail);
-                db.transaction((tx) => {
-                    tx.executeSql(
-                        `INSERT INTO users (firstName, lastName, email, password, gender, dob)
-               VALUES (?, ?, ?, ?, ?, ?);`,
-                        [userFirstName, userLastName, userEmail, userPassword, selectedValue, date.toDateString()],
-                        (tx, results) => { //async 
-                            if (results.rowsAffected > 0) {
-                                console.log('INSERTED to DB SUCCESSFULLY :Regsiter.js')
-                                alert('updated successfully!');
-                                if(createFlag===true)setCreateFlag(false);
-                                if(updateFlag===true)setUpdateFlag(false);
-                            } else {
-                                alert('Registration failed. Please try again.');
-                            }
-                        },
-                        (error) => {
-                            console.error('Error inserting user data:', error);
+            if (updateFlag === true) DeleteUser(userEmail);
+            db.transaction((tx) => {
+                tx.executeSql(
+                    `INSERT INTO users (firstName, lastName, email, password, gender, dob,latitude,longitude,uri)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+                    [userFirstName, userLastName, userEmail, userPassword, selectedValue, date.toDateString(), location[0], location[1], selectedImage],
+                    (tx, results) => { //async 
+                        if (results.rowsAffected > 0) {
+                            console.log('INSERTED to DB SUCCESSFULLY :Regsiter.js')
+                            alert('updated successfully!');
+                            if (createFlag === true) setCreateFlag(false);
+                            if (updateFlag === true) setUpdateFlag(false);
+                        } else {
+                            alert('Registration failed. Please try again.');
                         }
-                    );
-                });
-            } else { alert('Agree to The Terms and Condition') }
+                    },
+                    (error) => {
+                        console.error('Error inserting user data:', error);
+                    }
+                );
+            });
+
         }
     };
 
@@ -115,11 +133,23 @@ export default function Register({createFlag,updateFlag,setUpdateFlag,setCreateF
 
     };
 
-    
+
 
     return (
         <View style={styles.LoginPage}>
-            <Text style={styles.LoginTextStyle}>Register</Text>
+            <Text style={styles.LoginTextStyle}>Update</Text>
+            <View>
+                <Pressable onPress={() => HandleCameraLaunch(setSelectedImage)}>
+                    <Image
+                        source={{ uri: selectedImage }}
+                        style={{ width: 125, height: 125, borderRadius: 100, alignSelf: 'center', margin: 10 }}
+                        resizeMode='contain'
+                    />
+                </Pressable>
+                <Pressable onPress={() => UploadFromGallery(setSelectedImage)}>
+                    <Text style={{ color: '#eb6c49', fontSize: 15, fontWeight: '800', padding: 10, margin: 10, borderColor: 'white', borderWidth: 2, borderRadius: 20, borderColor: '#eb6c49', width: 180, alignSelf: 'center' }}>Upload From Gallery</Text>
+                </Pressable>
+            </View>
             <UserInputField placeholderValue={"FirstName"} userValue={userFirstName} setfuction={setUserFirstName} style1={styles.InputStyle} style2={styles.TextStyle}></UserInputField>
             <Text style={styles.ValidationStyle}>{firstNameError}</Text>
             <UserInputField placeholderValue={"LastName"} userValue={userLastName} setfuction={setUserLastName} style1={styles.InputStyle} style2={styles.TextStyle}></UserInputField>
@@ -151,6 +181,9 @@ export default function Register({createFlag,updateFlag,setUpdateFlag,setCreateF
                 />
             )}
             <Text style={{ color: "#b5b1b1", alignSelf: 'center', fontWeight: '200' }}>_________________________________________________________</Text>
+            <Pressable onPress={accessLocation}>
+                <Text style={{ color: '#eb6c49', fontSize: 15, fontWeight: '800', padding: 10, margin: 10, borderColor: 'white', borderWidth: 2, borderRadius: 20, borderColor: '#eb6c49', width: 180, alignSelf: 'center', textAlign: 'center', marginTop: 25 }}>Store Location</Text>
+            </Pressable>
             <Button buttonText={styles.ButtonText} onPress={handleRegistration} buttonName={"Update"}></Button>
         </View>
     );

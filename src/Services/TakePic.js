@@ -16,7 +16,7 @@ export default HandleCameraLaunch = (setSelectedImage) => {
         console.log('Camera Error: ', response.error);
       } else {
         let imageUri = response.uri || response.assets?.[0]?.uri;
-        setSelectedImage({ uri: imageUri });
+        setSelectedImage(imageUri);
       }
     });
   }

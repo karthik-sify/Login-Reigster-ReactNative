@@ -15,7 +15,7 @@ export default UploadFromGallery = (setSelectedImage) => {
         console.log('Image picker error: ', response.error);
       } else {
         let imageUri = response.uri || response.assets?.[0]?.uri;
-        setSelectedImage({ uri: imageUri });
+        setSelectedImage(imageUri);
       }
     });
   };

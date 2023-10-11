@@ -70,6 +70,8 @@ const UserList = ({updateFlag}) => {
             <Text style={styles.textStyle}>Email:  {item.email}</Text>
             <Text style={styles.textStyle}>Gender:  {item.gender}</Text>
             <Text style={styles.textStyle}>Date of Birth:  {item.dob}</Text>
+            <Text style={styles.textStyle}>Latitude:  {item.latitude}</Text>
+            <Text style={styles.textStyle}>Longitude:  {item.longitude}</Text>
           </View>
         )}
       />

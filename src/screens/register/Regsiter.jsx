@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Text, ScrollView, Pressable, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, ScrollView, Pressable, Image } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import db from '../../Services/Database';
 import styles from './styles';
-import ImagePic from '../../Components/ImagePic';
+import profilePic from '../../Assests/uploadpic.png';
 import HandleCameraLaunch from '../../Services/TakePic';
 import UploadFromGallery from '../../Services/UploadPic';
+import requestLocationPermission from "../../Services/LocationPermission";
+import getUserLocation from "../../Services/GetLocation";
+
 
 
 import UserInputField from '../../Components/UserInputField';
@@ -22,7 +25,8 @@ export default function Register({ navigation }) {
     const [selectedValue, setSelectedValue] = useState('Male');
     const [date, setDate] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
-    const [selectedImage, setSelectedImage] = useState(require("../../Assests/uploadpic.png"));
+    const [selectedImage, setSelectedImage] = useState(Image.resolveAssetSource(profilePic).uri);
+    const [location, setLocation] = useState([])
     const [isChecked, setIsChecked] = useState(false);
     const [firstNameError, setFirstNameError] = useState('');
     const [lastNameError, setLastNameError] = useState('');
@@ -37,9 +41,9 @@ export default function Register({ navigation }) {
             if (isChecked) {
                 db.transaction((tx) => {
                     tx.executeSql(
-                        `INSERT INTO users (firstName, lastName, email, password, gender, dob,uri)
-               VALUES (?, ?, ?, ?, ?, ?, ?);`,
-                        [userFirstName, userLastName, userEmail, userPassword, selectedValue, date.toDateString(), selectedImage.uri],
+                        `INSERT INTO users (firstName, lastName, email, password, gender, dob,latitude,longitude,uri)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+                        [userFirstName, userLastName, userEmail, userPassword, selectedValue, date.toDateString(), location[0], location[1], selectedImage],
                         (tx, results) => { //async 
                             if (results.rowsAffected > 0) {
                                 console.log('INSERTED to DB SUCCESSFULLY :Regsiter.js')
@@ -116,25 +120,39 @@ export default function Register({ navigation }) {
         setDate(currentDate);
 
     };
+    const accessLocation = async () => {
+        if (await requestLocationPermission() === true) {
+            try {
+                const locationResult = await getUserLocation();   //await --lines below this executes after result is received
+                setLocation(locationResult);
+                alert("location Stored")
+
+            } catch (error) {
+                console.error(error);
+                alert('Location not accessed')
+            }
+        }
+    };
+
 
     return (
         <ScrollView>
             <View style={styles.PageStyle}>
-                <View style={{ flexDirection: 'row', justifyContent:'space-around', alignItems: 'center' }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
                     <Pressable onPress={() => navigation.navigate('Home')}>
                         <Text style={styles.ReactAppText}>React App</Text>
                     </Pressable>
                     <View>
-                    <Pressable onPress={() => HandleCameraLaunch(setSelectedImage)}>
-                        <Image
-                            source={selectedImage}
-                            style={{ width: 125, height: 125, borderRadius: 100,alignSelf:'center'}}
-                            resizeMode='contain'
-                        />
-                    </Pressable>
-                    <Pressable onPress={() => UploadFromGallery(setSelectedImage)}>
-                    <Text style={{color:'white',fontSize:17,fontWeight:'800',padding:10,margin:10,borderColor:'white',borderWidth:2,borderRadius:20}}>Upload From Gallery</Text>
-                    </Pressable>
+                        <Pressable onPress={() => HandleCameraLaunch(setSelectedImage)}>
+                            <Image
+                                source={{ uri: selectedImage }}
+                                style={{ width: 120, height: 120, borderRadius: 100, alignSelf: 'center' }}
+                                resizeMode='contain'
+                            />
+                        </Pressable>
+                        <Pressable onPress={() => UploadFromGallery(setSelectedImage)}>
+                            <Text style={{ color: 'white', fontSize: 14, fontWeight: '800', padding: 10, margin: 10, borderColor: 'white', borderWidth: 2, borderRadius: 20 }}>Upload From Gallery</Text>
+                        </Pressable>
                     </View>
                 </View>
                 <View style={styles.LoginPage}>
@@ -171,6 +189,9 @@ export default function Register({ navigation }) {
                     )}
                     <Text style={{ color: "#b5b1b1", alignSelf: 'center', fontWeight: '200' }}>___________________________________________________________</Text>
 
+                    <Pressable onPress={accessLocation}>
+                        <Text style={{ color: '#eb6c49', fontSize: 15, fontWeight: '800', padding: 10, margin: 10, borderColor: 'white', borderWidth: 2, borderRadius: 20, borderColor: '#eb6c49', width: 180, alignSelf: 'center', textAlign: 'center', marginTop: 25 }}>Store Location</Text>
+                    </Pressable>
                     <CustomCheckbox isChecked={isChecked} setIsChecked={setIsChecked}></CustomCheckbox>
 
                     <Button buttonText={styles.ButtonText} onPress={handleRegistration} buttonName={"Register"}></Button>

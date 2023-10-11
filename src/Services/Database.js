@@ -16,7 +16,6 @@ const db = SQLite.openDatabase(
 db.transaction((tx) => {
     tx.executeSql(
         `CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
             firstName TEXT NOT NULL,
             lastName TEXT NOT NULL,
             email TEXT NOT NULL,
