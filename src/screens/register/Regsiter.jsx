@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, ScrollView, Pressable } from 'react-native';
+import { View, StyleSheet, Text, ScrollView, Pressable, Image } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import db from '../../Services/Database';
 import styles from './styles';
 import ImagePic from '../../Components/ImagePic';
+import HandleCameraLaunch from '../../Services/TakePic';
+import UploadFromGallery from '../../Services/UploadPic';
 
 
 import UserInputField from '../../Components/UserInputField';
@@ -20,7 +22,7 @@ export default function Register({ navigation }) {
     const [selectedValue, setSelectedValue] = useState('Male');
     const [date, setDate] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
-    const [selectedImage, setSelectedImage] = useState(null);
+    const [selectedImage, setSelectedImage] = useState(require("../../Assests/uploadpic.png"));
     const [isChecked, setIsChecked] = useState(false);
     const [firstNameError, setFirstNameError] = useState('');
     const [lastNameError, setLastNameError] = useState('');
@@ -29,6 +31,7 @@ export default function Register({ navigation }) {
     const [conformPasswordError, setConformPasswordError] = useState('');
     const [matchPasswordError, setMatchPasswordError] = useState('');
 
+
     const handleRegistration = () => {
         if (validateForm()) {
             if (isChecked) {
@@ -36,7 +39,7 @@ export default function Register({ navigation }) {
                     tx.executeSql(
                         `INSERT INTO users (firstName, lastName, email, password, gender, dob,uri)
                VALUES (?, ?, ?, ?, ?, ?, ?);`,
-                        [userFirstName, userLastName, userEmail, userPassword, selectedValue, date.toDateString(),selectedImage],
+                        [userFirstName, userLastName, userEmail, userPassword, selectedValue, date.toDateString(), selectedImage.uri],
                         (tx, results) => { //async 
                             if (results.rowsAffected > 0) {
                                 console.log('INSERTED to DB SUCCESSFULLY :Regsiter.js')
@@ -117,9 +120,23 @@ export default function Register({ navigation }) {
     return (
         <ScrollView>
             <View style={styles.PageStyle}>
-                <Pressable onPress={() => navigation.navigate('Home')}>
-                    <Text style={styles.ReactAppText}>React App</Text>
-                </Pressable>
+                <View style={{ flexDirection: 'row', justifyContent:'space-around', alignItems: 'center' }}>
+                    <Pressable onPress={() => navigation.navigate('Home')}>
+                        <Text style={styles.ReactAppText}>React App</Text>
+                    </Pressable>
+                    <View>
+                    <Pressable onPress={() => HandleCameraLaunch(setSelectedImage)}>
+                        <Image
+                            source={selectedImage}
+                            style={{ width: 125, height: 125, borderRadius: 100,alignSelf:'center'}}
+                            resizeMode='contain'
+                        />
+                    </Pressable>
+                    <Pressable onPress={() => UploadFromGallery(setSelectedImage)}>
+                    <Text style={{color:'white',fontSize:17,fontWeight:'800',padding:10,margin:10,borderColor:'white',borderWidth:2,borderRadius:20}}>Upload From Gallery</Text>
+                    </Pressable>
+                    </View>
+                </View>
                 <View style={styles.LoginPage}>
                     <Text style={styles.LoginTextStyle}>Register</Text>
                     <UserInputField placeholderValue={"First Name"} userValue={userFirstName} setfuction={setUserFirstName} style1={styles.InputStyle} style2={styles.TextStyle}></UserInputField>
@@ -153,7 +170,6 @@ export default function Register({ navigation }) {
                         />
                     )}
                     <Text style={{ color: "#b5b1b1", alignSelf: 'center', fontWeight: '200' }}>___________________________________________________________</Text>
-                    <ImagePic selectedImage={selectedImage} setSelectedImage={setSelectedImage}></ImagePic>
 
                     <CustomCheckbox isChecked={isChecked} setIsChecked={setIsChecked}></CustomCheckbox>
 

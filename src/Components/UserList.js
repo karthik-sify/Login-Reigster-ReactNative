@@ -65,7 +65,7 @@ const UserList = ({updateFlag}) => {
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
           <View >
-            <Image source={{uri:item.uri}} style={{width:100,height:100}}></Image>
+            <Image source={{uri:item.uri}} style={{width:100,height:100,margin:5,borderRadius:50}}></Image>
             <Text style={styles.textStyle}>Name:  {item.firstName} {item.lastName}</Text>
             <Text style={styles.textStyle}>Email:  {item.email}</Text>
             <Text style={styles.textStyle}>Gender:  {item.gender}</Text>

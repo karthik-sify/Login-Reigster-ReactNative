@@ -21,7 +21,6 @@ const ImagePic = ({selectedImage,setSelectedImage}) => {
       } else {
         let imageUri = response.uri || response.assets?.[0]?.uri;
         setSelectedImage(imageUri);
-        setSelectedImg(imageUri)
       }
     });
   };
@@ -43,20 +42,12 @@ const ImagePic = ({selectedImage,setSelectedImage}) => {
       } else {
         let imageUri = response.uri || response.assets?.[0]?.uri;
         setSelectedImage(imageUri);
-        setSelectedImg(imageUri)
       }
     });
   }
 
   return (
     <View style={{ flex: 1, justifyContent: 'center' }}>
-     {selectedImage && (
-          <Image
-            source={{ uri: selectedImage }}
-            style={{ flex: 1 }}
-            resizeMode="contain"
-          />
-    )}
     <View style={{ marginTop: 20 }}>
       <Button title="Choose from Device" onPress={openImagePicker} />
     </View>
