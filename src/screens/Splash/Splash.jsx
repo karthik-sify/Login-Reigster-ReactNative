@@ -3,6 +3,8 @@ import { View, } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default Splash=({navigation})=>{
+  
+    //RETRIVES USER EMAIL FROM ASYNC STORAGE
     const retrieveData = async () => {
         try {
           const value = await AsyncStorage.getItem("UsersEmail");
@@ -25,8 +27,6 @@ export default Splash=({navigation})=>{
             navigation.replace("Login")
           }
           else{
-           // navigation.navigate("TabNavigator")
-            //navigation.navigate("DrawerNavigator")
             navigation.replace("DrawerAndTab")
           }
         };
@@ -35,7 +35,6 @@ export default Splash=({navigation})=>{
 
     return(
         <View>
-            {/* <Text style={{color:'black'}}>hiii</Text> */}
         </View>
     );
 };

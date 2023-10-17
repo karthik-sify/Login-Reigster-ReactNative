@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import Login from './src/screens/login/Login';
 import Register from './src/screens/register/Regsiter';
 import Splash from './src/screens/Splash/Splash';
-import TabNavigator from './src/screens/TabNavigation/TabNavigator';
-import DrawerNavigator from './src/screens/DrawerNavigation/DrawerNavigation';
 import DrawerAndTab from './src/screens/DrawerAndTab/DrawerAndTab';
 
 
@@ -33,16 +31,6 @@ export default App = () => {
           component={Register}
           options={{ title: "Register" }}
         />
-        {/* <stack.Screen
-          name='TabNavigator'
-          component={TabNavigator}
-          options={{ title: "tabs" }}
-        />
-        <stack.Screen
-          name='DrawerNavigator'
-          component={DrawerNavigator}
-          options={{ title: "drawerNavigator" }}
-        /> */}
         <stack.Screen
           name='DrawerAndTab'
           component={DrawerAndTab}

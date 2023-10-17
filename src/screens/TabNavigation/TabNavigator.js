@@ -31,9 +31,6 @@ const TabNavigator = () => {
           <Image source={photo1} style={{ width: 30, height: 30 }}></Image>
         ),
       }} />
-
-      
-
     </Tab.Navigator>
   );
 };

@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, Pressable, Image } from 'react-native';
-import { RadioButton } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import db from '../Services/Database';
 import styles from '../screens/register/styles';
@@ -11,6 +10,7 @@ import requestLocationPermission from '../Services/LocationPermission';
 import getUserLocation from '../Services/GetLocation';
 import UserInputField from './UserInputField';
 import Button from './Button';
+import RadioButtons from './RadioButtons';
 
 export default function Register({ createFlag, updateFlag, setUpdateFlag, setCreateFlag, firstNamePlaceholderValue, lastNamePlaceholderValue, emailPlaceholderValue, PasswordPlaceholdervalue, conformPasswordPlaceholderValue, genderPlaceHolder, datePlaceholderValue, latitudePlaceholderValue, longitudePlaceholderValue, uriPlaceholderValue }) {
     const [userFirstName, setUserFirstName] = useState(firstNamePlaceholderValue);
@@ -23,6 +23,10 @@ export default function Register({ createFlag, updateFlag, setUpdateFlag, setCre
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [location, setLocation] = useState([latitudePlaceholderValue,longitudePlaceholderValue])
     const [selectedImage, setSelectedImage] = useState(uriPlaceholderValue);
+    const [locationFlag,setLocationFlag]=useState(false);
+
+
+
     const [firstNameError, setFirstNameError] = useState('');
     const [lastNameError, setLastNameError] = useState('');
     const [emailError, setEmailError] = useState('');
@@ -32,6 +36,7 @@ export default function Register({ createFlag, updateFlag, setUpdateFlag, setCre
 
 
     const accessLocation = async () => {
+        setLocationFlag(true);
         if (await requestLocationPermission() === true) {
             try {
                 const locationResult = await getUserLocation();   //await --lines below this executes after result is received
@@ -43,6 +48,7 @@ export default function Register({ createFlag, updateFlag, setUpdateFlag, setCre
                 alert('Location not accessed')
             }
         }
+        setLocationFlag(false);
     };
 
 
@@ -182,7 +188,7 @@ export default function Register({ createFlag, updateFlag, setUpdateFlag, setCre
             )}
             <Text style={{ color: "#b5b1b1", alignSelf: 'center', fontWeight: '200' }}>_________________________________________________________</Text>
             <Pressable onPress={accessLocation}>
-                <Text style={{ color: '#eb6c49', fontSize: 15, fontWeight: '800', padding: 10, margin: 10, borderColor: 'white', borderWidth: 2, borderRadius: 20, borderColor: '#eb6c49', width: 180, alignSelf: 'center', textAlign: 'center', marginTop: 25 }}>Store Location</Text>
+                <Text style={{ color: '#eb6c49', fontSize: 15, fontWeight: '800', padding: 10, margin: 10, borderColor: 'white', borderWidth: 2, borderRadius: 20, borderColor: '#eb6c49', width: 180, alignSelf: 'center', textAlign: 'center', marginTop: 25 }}>Store Location{locationFlag?"  Loading....":""}</Text>
             </Pressable>
             <Button buttonText={styles.ButtonText} onPress={handleRegistration} buttonName={"Update"}></Button>
         </View>
@@ -190,18 +196,4 @@ export default function Register({ createFlag, updateFlag, setUpdateFlag, setCre
 
 };
 
-
-const RadioButtons = ({ selectedValue, setSelectedValue }) => {
-    return (
-        <View>
-            <RadioButton.Group
-                onValueChange={(value) => setSelectedValue(value)}
-                value={selectedValue}
-            >
-                <RadioButton.Item label="Male" value="Male" />
-                <RadioButton.Item label="Female" value="Female" />
-            </RadioButton.Group>
-        </View>
-    );
-};
 

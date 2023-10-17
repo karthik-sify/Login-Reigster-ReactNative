@@ -1,4 +1,4 @@
-import { View, ScrollView, Alert} from "react-native";
+import { View, ScrollView, Alert } from "react-native";
 import UserList from "../../Components/UserList";
 import styles from "./style";
 import Button from "../../Components/Button";
@@ -17,7 +17,7 @@ export default function Home({ navigation }) {
     const [userDetails, setUserDetails] = useState([]);
     const photo1 = require("../../Assests/edit.png");
 
-
+    //TO SHOW UPDATED DETAILS IN HOME PAGE
     useEffect(() => {
         const getDetails = async () => setUserDetails(await RetrieveUserDetails());
         getDetails();
@@ -59,13 +59,13 @@ export default function Home({ navigation }) {
     }
 
     return (
-        <View style={{ flex: 1 }}>
-            <View style={{ flexDirection: 'row', padding: 10, justifyContent: 'space-between' }}>
+        <View style={styles.mainView}>
+            <View style={styles.profileAndEditIcon}>
                 <UserList updateFlag={updateFlag}></UserList>
-                <Image source={photo1} style={{ width: 35, height: 35, margin: 20 }} onPress={() => handleUpdate()}></Image>
+                <Image source={photo1} style={styles.imageStyle} onPress={() => handleUpdate()}></Image>
             </View>
             <Button buttonText={styles.ActionButtonText} onPress={() => handleDelete()} buttonName={"Delete User"}></Button>
-            <Modal style={{ padding: 15 }} visible={updateFlag} onDismiss={() => setUpdateFlag(false)} animationType='slide'>
+            <Modal style={styles.modalStyle} visible={updateFlag} onDismiss={() => setUpdateFlag(false)} animationType='slide'>
                 <ScrollView>
                     <DetailsForm updateFlag={updateFlag} setUpdateFlag={setUpdateFlag} firstNamePlaceholderValue={userDetails.firstName} lastNamePlaceholderValue={userDetails.lastName} emailPlaceholderValue={userDetails.email} PasswordPlaceholdervalue={userDetails.password} conformPasswordPlaceholderValue={userDetails.password} genderPlaceHolder={userDetails.gender} datePlaceholderValue={new Date(userDetails.dob)} latitudePlaceholderValue={userDetails.latitude} longitudePlaceholderValue={userDetails.longitude} uriPlaceholderValue={userDetails.uri}></DetailsForm>
                 </ScrollView>

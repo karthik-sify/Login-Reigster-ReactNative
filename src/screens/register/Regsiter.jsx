@@ -1,20 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, ScrollView, Pressable, Image } from 'react-native';
-import { RadioButton } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import db from '../../Services/Database';
+
 import styles from './styles';
 import profilePic from '../../Assests/uploadpic.png';
+
+//SERVICES
+import db from '../../Services/Database';
 import HandleCameraLaunch from '../../Services/TakePic';
 import UploadFromGallery from '../../Services/UploadPic';
 import requestLocationPermission from "../../Services/LocationPermission";
 import getUserLocation from "../../Services/GetLocation";
 
-
-
+//COMPONENTS
 import UserInputField from '../../Components/UserInputField';
 import Button from '../../Components/Button';
 import CustomCheckbox from '../../Components/CustomCheckBox';
+import RadioButtons from '../../Components/RadioButtons';
+
 
 export default function Register({ navigation }) {
     const [userFirstName, setUserFirstName] = useState('');
@@ -28,6 +31,9 @@ export default function Register({ navigation }) {
     const [selectedImage, setSelectedImage] = useState(Image.resolveAssetSource(profilePic).uri);
     const [location, setLocation] = useState([])
     const [isChecked, setIsChecked] = useState(false);
+    const [locationFlag,setLocationFlag]=useState(false);
+
+    //ERROR
     const [firstNameError, setFirstNameError] = useState('');
     const [lastNameError, setLastNameError] = useState('');
     const [emailError, setEmailError] = useState('');
@@ -120,7 +126,10 @@ export default function Register({ navigation }) {
         setDate(currentDate);
 
     };
+
+    //RETRIVING LOCATION 
     const accessLocation = async () => {
+        setLocationFlag(true)
         if (await requestLocationPermission() === true) {
             try {
                 const locationResult = await getUserLocation();   //await --lines below this executes after result is received
@@ -132,26 +141,25 @@ export default function Register({ navigation }) {
                 alert('Location not accessed')
             }
         }
+        setLocationFlag(false);
     };
 
 
     return (
         <ScrollView>
             <View style={styles.PageStyle}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
-                    <Pressable onPress={() => navigation.navigate('Home')}>
+                <View style={styles.PageTop}>
                         <Text style={styles.ReactAppText}>React App</Text>
-                    </Pressable>
                     <View>
                         <Pressable onPress={() => HandleCameraLaunch(setSelectedImage)}>
                             <Image
                                 source={{ uri: selectedImage }}
-                                style={{ width: 120, height: 120, borderRadius: 100, alignSelf: 'center' }}
+                                style={styles.ProfilePic}
                                 resizeMode='contain'
                             />
                         </Pressable>
                         <Pressable onPress={() => UploadFromGallery(setSelectedImage)}>
-                            <Text style={{ color: 'white', fontSize: 14, fontWeight: '800', padding: 10, margin: 10, borderColor: 'white', borderWidth: 2, borderRadius: 20 }}>Upload From Gallery</Text>
+                            <Text style={styles.UploadFromGallery}>Upload From Gallery</Text>
                         </Pressable>
                     </View>
                 </View>
@@ -170,7 +178,7 @@ export default function Register({ navigation }) {
                     <Text style={styles.ValidationStyle}>{matchPasswordError}</Text>
                     <Text style={styles.TextStyle}>Gender:</Text>
                     <RadioButtons selectedValue={selectedValue} setSelectedValue={setSelectedValue}></RadioButtons>
-                    <Text style={{ color: "#b5b1b1", alignSelf: 'center', fontWeight: '200' }}>___________________________________________________________</Text>
+                    <Text style={styles.DashStyle}>___________________________________________________________</Text>
 
                     <Text style={styles.TextStyle}>Date of Birth:</Text>
 
@@ -187,13 +195,12 @@ export default function Register({ navigation }) {
                             onChange={handleDateChange}
                         />
                     )}
-                    <Text style={{ color: "#b5b1b1", alignSelf: 'center', fontWeight: '200' }}>___________________________________________________________</Text>
+                    <Text style={styles.DashStyle}>___________________________________________________________</Text>
 
                     <Pressable onPress={accessLocation}>
-                        <Text style={{ color: '#eb6c49', fontSize: 15, fontWeight: '800', padding: 10, margin: 10, borderColor: 'white', borderWidth: 2, borderRadius: 20, borderColor: '#eb6c49', width: 180, alignSelf: 'center', textAlign: 'center', marginTop: 25 }}>Store Location</Text>
+                        <Text style={styles.StoreLocation}>Store Location{locationFlag?"  Loading....":""}</Text>
                     </Pressable>
                     <CustomCheckbox isChecked={isChecked} setIsChecked={setIsChecked}></CustomCheckbox>
-
                     <Button buttonText={styles.ButtonText} onPress={handleRegistration} buttonName={"Register"}></Button>
                 </View>
             </View>
@@ -202,18 +209,4 @@ export default function Register({ navigation }) {
 
 };
 
-
-const RadioButtons = ({ selectedValue, setSelectedValue }) => {
-    return (
-        <View>
-            <RadioButton.Group
-                onValueChange={(value) => setSelectedValue(value)}
-                value={selectedValue}
-            >
-                <RadioButton.Item label="Male" value="Male" />
-                <RadioButton.Item label="Female" value="Female" />
-            </RadioButton.Group>
-        </View>
-    );
-};
 

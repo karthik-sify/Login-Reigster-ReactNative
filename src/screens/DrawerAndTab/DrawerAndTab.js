@@ -5,6 +5,8 @@ import DrawerNavigator from '../DrawerNavigation/DrawerNavigation';
 
 const stack = createNativeStackNavigator()
 
+
+//FROM SPLASH 
 const DrawerAndTab = () => {
     return (
         <stack.Navigator
